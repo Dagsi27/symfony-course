@@ -61,8 +61,7 @@ MicroPostController extends AbstractController
     #[Route('/micro-post/{post}/edit', name: 'app_micro_post_edit')]
     public function edit(MicroPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $microPost = new MicroPost();
-        $form = $this->createFormBuilder($microPost)
+        $form = $this->createFormBuilder($post)
             ->add('title')
             ->add('text')
             ->getForm();
@@ -71,8 +70,7 @@ MicroPostController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
-            $post->setCreated(new \DateTime());
-
+            
             // Persist the entity to the database
             $entityManager->persist($post);
             $entityManager->flush(); // Executes the queries to save the entity
