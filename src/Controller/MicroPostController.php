@@ -57,4 +57,31 @@ MicroPostController extends AbstractController
 
         return $this->render('micro_post/add.html.twig', ['form' => $form]);
     }
+
+    #[Route('/micro-post/{post}/edit', name: 'app_micro_post_edit')]
+    public function edit(MicroPost $post, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $microPost = new MicroPost();
+        $form = $this->createFormBuilder($microPost)
+            ->add('title')
+            ->add('text')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
+            $post->setCreated(new \DateTime());
+
+            // Persist the entity to the database
+            $entityManager->persist($post);
+            $entityManager->flush(); // Executes the queries to save the entity
+
+            $this->addFlash('Success', 'Your micro post have been updated!');
+
+            return $this->redirectToRoute('app_micro_post_index');
+        }
+
+        return $this->render('micro_post/edit.html.twig', ['form' => $form]);
+    }
 }
