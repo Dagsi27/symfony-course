@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\MicroPost;
+use App\Form\MicroPostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -33,11 +34,7 @@ MicroPostController extends AbstractController
     #[Route('/micro-post/{id}/add', name: 'app_micro_post_add', priority: 2)]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $microPost = new MicroPost();
-        $form = $this->createFormBuilder($microPost)
-            ->add('title')
-            ->add('text')
-            ->getForm();
+        $form = $this->createForm(MicroPostType::class, new MicroPost());
 
         $form->handleRequest($request);
 
@@ -61,16 +58,12 @@ MicroPostController extends AbstractController
     #[Route('/micro-post/{post}/edit', name: 'app_micro_post_edit')]
     public function edit(MicroPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createFormBuilder($post)
-            ->add('title')
-            ->add('text')
-            ->getForm();
-
+        $form = $this->createForm(MicroPostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
-            
+
             // Persist the entity to the database
             $entityManager->persist($post);
             $entityManager->flush(); // Executes the queries to save the entity
