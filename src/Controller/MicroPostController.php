@@ -31,7 +31,7 @@ MicroPostController extends AbstractController
 
     }
 
-    #[Route('/micro-post/{id}/add', name: 'app_micro_post_add', priority: 2)]
+    #[Route('/micro-post/add', name: 'app_micro_post_add', priority: 2)]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MicroPostType::class, new MicroPost());
@@ -52,7 +52,7 @@ MicroPostController extends AbstractController
 
         }
 
-        return $this->render('micro_post/add.html.twig', ['form' => $form]);
+        return $this->render('micro_post/edit.html.twig', ['form' => $form]);
     }
 
     #[Route('/micro-post/{post}/edit', name: 'app_micro_post_edit')]
