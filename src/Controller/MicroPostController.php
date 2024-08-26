@@ -35,7 +35,6 @@ MicroPostController extends AbstractController
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MicroPostType::class, new MicroPost());
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
