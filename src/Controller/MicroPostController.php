@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\MicroPost;
 use App\Form\CommentType;
 use App\Form\MicroPostType;
+use App\Repository\MicroPostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +17,10 @@ class
 MicroPostController extends AbstractController
 {
     #[Route('/micro-post', name: 'app_micro_post_index')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(MicroPostRepository $posts): Response
     {
         return $this->render('micro_post/index.html.twig', [
-            'posts' => $entityManager->getRepository(MicroPost::class)->findAll(),
+            'posts' => $posts->findAllWithComments(),
         ]);
     }
 
