@@ -31,9 +31,9 @@ class HelloController extends AbstractController
 //            $entityManager->persist($profile);
 //            $entityManager->flush();
 
-        $profile = $profiles->find(1);
-        $entityManager->remove($profile);
-        $entityManager->flush();
+//            $profile = $profiles->find(1);
+//            $entityManager->remove($profile);
+//            $entityManager->flush();
 
         return $this->render('hello/index.html.twig', [
             'messages' => $this->messages,

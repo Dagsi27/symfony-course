@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\MicroPost;
+use App\Form\CommentType;
 use App\Form\MicroPostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -73,5 +74,28 @@ MicroPostController extends AbstractController
         }
 
         return $this->render('micro_post/edit.html.twig', ['form' => $form]);
+    }
+
+    #[Route('/micro-post/{post}/comment', name: 'app_micro_post_comment', priority: 2)]
+    public function addComment(MicroPost $post, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(CommentType::class, new Comment());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment = $form->getData();
+            $comment->setMicroPost($post);
+
+            // Persist the entity to the database
+            $entityManager->persist($comment);
+            $entityManager->flush(); // Executes the queries to save the entity
+
+            $this->addFlash('Success', 'Your comment have been added!');
+
+            return $this->redirectToRoute('app_micro_post_show', ['id' => $post->getId()]);
+
+        }
+
+        return $this->render('micro_post/comment.html.twig', ['form' => $form, 'post' => $post]);
     }
 }
