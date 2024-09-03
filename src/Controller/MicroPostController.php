@@ -42,7 +42,7 @@ MicroPostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
             $post->setCreated(new \DateTime());
-
+            $post->setAuthor($this->getUser());
             // Persist the entity to the database
             $entityManager->persist($post);
             $entityManager->flush(); // Executes the queries to save the entity
@@ -86,7 +86,7 @@ MicroPostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment = $form->getData();
             $comment->setMicroPost($post);
-
+            $comment->setAuthor($this->getUser());
             // Persist the entity to the database
             $entityManager->persist($comment);
             $entityManager->flush(); // Executes the queries to save the entity
