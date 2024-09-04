@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class
 MicroPostController extends AbstractController
@@ -56,6 +57,7 @@ MicroPostController extends AbstractController
         return $this->render('micro_post/edit.html.twig', ['form' => $form]);
     }
 
+    #[IsGranted('ROLE_EDITOR')]
     #[Route('/micro-post/{post}/edit', name: 'app_micro_post_edit')]
     public function edit(MicroPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -77,6 +79,7 @@ MicroPostController extends AbstractController
         return $this->render('micro_post/edit.html.twig', ['form' => $form, 'post' => $post]);
     }
 
+    #[IsGranted('ROLE_COMMENTER')]
     #[Route('/micro-post/{post}/comment', name: 'app_micro_post_comment', priority: 2)]
     public function addComment(MicroPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
