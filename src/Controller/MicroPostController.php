@@ -14,8 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class
-MicroPostController extends AbstractController
+class MicroPostController extends AbstractController
 {
     #[Route('/micro-post', name: 'app_micro_post_index')]
     public function index(MicroPostRepository $posts): Response
